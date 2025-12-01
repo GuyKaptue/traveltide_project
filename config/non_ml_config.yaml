@@ -1,0 +1,97 @@
+# config/ non_ml_config.yaml
+segmentation:
+  threshold_definitions:
+    TOTAL_SPEND:
+      column: total_spend
+      quantile: 0.8
+      fallback: 4000
+      description: >
+        Spend median ≈ 3343, mean ≈ 4179, 75% ≈ 5522.
+        Using the 80th percentile (~5522) with fallback 4000 ensures
+        only top spenders qualify, but fallback prevents thresholds
+        from being too strict if data is sparse.
+
+    TRIP_COUNT:
+      column: num_trips
+      quantile: 0.8
+      fallback: 1.5
+      description: >
+        Trips median = 3, mean ≈ 2.68.
+        Setting quantile at 0.8 (~4 trips) with fallback 1.5
+        balances frequent travelers while avoiding exclusion
+        when trip counts are low.
+
+    BROWSING_RATE:
+      column: browsing_rate
+      quantile: 0.8
+      fallback: 0.6
+      description: >
+        Browsing rate mean ≈ 0.66, median ≈ 0.625.
+        Threshold at 0.8 (~0.78) captures high‑intent browsers,
+        fallback 0.6 ensures average browsers are not excluded.
+
+    HOTEL_SPEND:
+      column: money_spent_hotel_total
+      quantile: 0.8
+      fallback: 1200
+      description: >
+        Hotel spend median ≈ 1213, mean ≈ 1831.
+        80th percentile (~2446) targets heavy hotel spenders,
+        fallback 1200 ensures typical hotel users qualify.
+
+    BUSINESS_RATE:
+      column: business_rate
+      quantile: 0.8
+      fallback: 0.2
+      description: >
+        Business rate mean ≈ 0.19, median = 0.0.
+        80th percentile (~0.33) captures business travelers,
+        fallback 0.2 ensures moderate business users are included.
+
+    GROUP_RATE:
+      column: group_rate
+      quantile: 0.8
+      fallback: 0.1
+      description: >
+        Group rate mean ≈ 0.027, sparse distribution.
+        80th percentile often collapses to 0, so fallback 0.1
+        ensures occasional group travelers qualify.
+
+    AVG_BAGS:
+      column: avg_bags
+      quantile: 0.8
+      fallback: 1.0
+      description: >
+        Avg bags median = 0.5, 75% = 1.0.
+        80th percentile (~1.0) targets heavy baggage users,
+        fallback 1.0 ensures perk assignment remains meaningful.
+
+  all_perks:
+    - "1 night free hotel plus flight"
+    - "free checked bags"
+    - "free hotel meal"
+    - "exclusive discounts"
+    - "no cancellation fees"
+
+  group_names:
+    - "VIP High-Frequency Spenders"
+    - "High-Intent Browsers & Spenders"
+    - "Group & Family Travelers / Heavy Baggage"
+    - "Hotel & Business Focused Travelers"
+    - "Baseline Travelers"
+
+  perk_groups:
+  - perk: "1 night free hotel plus flight"
+    group: "VIP High-Frequency Spenders"
+
+  - perk: "free checked bags"
+    group: "Group & Family Travelers / Heavy Baggage"
+
+  - perk: "free hotel meal"
+    group: "Hotel & Business Focused Travelers"
+
+  - perk: "no cancellation fees"
+    group: "High-Intent Browsers & Spenders" 
+
+  - perk: "exclusive discounts"
+    group: "Baseline Travelers"

@@ -1,0 +1,9 @@
+include README.md
+include setup.py
+include setup.cfg
+include pyproject.toml
+recursive-include core *.py
+recursive-include app *.py *.html *.css
+recursive-include data *.csv
+recursive-include sql *.sql
+recursive-include notebooks *.ipynb

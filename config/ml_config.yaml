@@ -1,0 +1,413 @@
+# config/ml_config.yaml
+# Enhanced Configuration for Balanced Customer Segmentation Pipeline
+# Now supports K-means, DBSCAN, and Hierarchical clustering with comprehensive metrics
+
+segmentation:
+  # =========================================================================
+  # QUANTILE-BASED THRESHOLDS
+  # =========================================================================
+  threshold_definitions:
+    TOTAL_SPEND:
+      column: total_spend
+      quantile: 0.80
+      fallback: 3000
+      description: >
+        Spend median ≈ 3343, mean ≈ 4179, 75% ≈ 5522.
+        Using the 80th percentile (~5522) with fallback 4000 ensures
+        only top spenders qualify, but fallback prevents thresholds
+        from being too strict if data is sparse.
+
+    TRIP_COUNT:
+      column: num_trips
+      quantile: 0.80
+      fallback: 1.5
+      description: >
+        Trips median = 3, mean ≈ 2.68.
+        Setting quantile at 0.8 (~4 trips) with fallback 1.5
+        balances frequent travelers while avoiding exclusion
+        when trip counts are low.
+
+    BROWSING_RATE:
+      column: browsing_rate
+      quantile: 0.80
+      fallback: 0.6
+      description: >
+        Browsing rate mean ≈ 0.66, median ≈ 0.625.
+        Threshold at 0.8 (~0.78) captures high-intent browsers,
+        fallback 0.6 ensures average browsers are not excluded.
+
+    HOTEL_SPEND:
+      column: money_spent_hotel_total
+      quantile: 0.80
+      fallback: 1200
+      description: >
+        Hotel spend median ≈ 1213, mean ≈ 1831.
+        80th percentile (~2446) targets heavy hotel spenders,
+        fallback 1200 ensures typical hotel users qualify.
+
+    BUSINESS_RATE:
+      column: business_rate
+      quantile: 0.80
+      fallback: 0.2
+      description: >
+        Business rate mean ≈ 0.19, median = 0.0.
+        80th percentile (~0.33) captures business travelers,
+        fallback 0.2 ensures moderate business users are included.
+
+    GROUP_RATE:
+      column: group_rate
+      quantile: 0.80
+      fallback: 0.1
+      description: >
+        Group rate mean ≈ 0.027, sparse distribution.
+        80th percentile often collapses to 0, so fallback 0.1
+        ensures occasional group travelers qualify.
+
+    AVG_BAGS:
+      column: avg_bags
+      quantile: 0.80
+      fallback: 1.0
+      description: >
+        Avg bags median = 0.5, 75% = 1.0.
+        80th percentile (~1.0) targets heavy baggage users,
+        fallback 1.0 ensures perk assignment remains meaningful.
+
+  # =========================================================================
+  # PERK ASSIGNMENTS (Elena-approved)
+  # =========================================================================
+  all_perks:
+    - "1 night free hotel plus flight"      # Cluster 0: VIP
+    - "free hotel meal"                     # Cluster 2: Hotel/Business
+    - "free checked bags"                   # Cluster 3: Group/Family
+    - "no cancellation fees"                # Cluster 4:  Browsers/Spenders
+    - "exclusive discounts"                 # Cluster 5: Baseline
+
+  # =========================================================================
+  # SEGMENT NAMES (Business-friendly labels)
+  # =========================================================================
+  group_names:
+    - "VIP High-Frequency Spenders"
+    - "Hotel & Business Focused Travelers"
+    - "Group & Family Travelers / Heavy Baggage"
+    - "High-Intent Browsers & Spenders"
+    - "Baseline Travelers"
+
+  perk_groups:
+  - perk: "1 night free hotel plus flight"
+    group: "VIP High-Frequency Spenders"
+
+  - perk: "free checked bags"
+    group: "Group & Family Travelers / Heavy Baggage"
+
+  - perk: "free hotel meal"
+    group: "Hotel & Business Focused Travelers"
+
+  - perk: "no cancellation fees"
+    group: "High-Intent Browsers & Spenders" 
+
+  - perk: "exclusive discounts"
+    group: "Baseline Travelers"
+
+  # =========================================================================
+  # TARGET DISTRIBUTION CONSTRAINTS
+  # =========================================================================
+  target_distribution:
+    min_pct: 12.0    # Minimum % per segment (avoid tiny segments)
+    max_pct: 23.0    # Maximum % per segment (avoid dominance)
+    
+    # Preferred distribution (should sum to 100%)
+    # These are targets, not hard constraints
+    preferred:
+      - 15.0  # VIP High-Frequency Spenders
+      - 22.0  # High-Intent Browsers & Spenders
+      - 20.0  # Group & Family Travelers
+      - 19.0  # Hotel & Business Focused
+      - 24.0  # Baseline Travelers
+
+  # =========================================================================
+  # CLUSTERING ALGORITHM SELECTION
+  # =========================================================================
+  clustering:
+    algorithm: "kmeans"  # kmeans | dbscan | hierarchical | auto
+    n_clusters: 5
+    enable_pca: true
+    n_components: 10
+    pca_whiten: true
+    scaler_method: "robust"  # robust | standard | minmax
+    random_state: 42
+    
+    # K-means specific parameters
+    kmeans:
+      n_init: 20        # More initializations for stability
+      max_iter: 500     # Allow convergence
+      algorithm: "lloyd"  # lloyd | elkan
+      rebalancing:
+        enabled: true     # Enable post-clustering rebalancing
+        method: "hierarchical"  # hierarchical | distance_based
+        max_iterations: 3  # Max rebalancing iterations
+    
+    # DBSCAN specific parameters
+    dbscan:
+      eps: 0.5
+      min_samples: 10
+      metric: "euclidean"
+      auto_eps: true
+      eps_search_range: [0.1, 1.0]
+      target_clusters: [3, 8]  # Desired range of clusters
+      min_samples_strategy: "percentage"  # percentage | fixed | sqrt
+      min_samples_percentage: 0.02
+      min_samples_fixed: 10
+      max_noise_ratio: 0.3
+    
+    # Hierarchical clustering
+    hierarchical:
+      method: "ward"
+      metric: "euclidean"
+      linkage: "average"
+
+  # =========================================================================
+  # DBSCAN-SPECIFIC FEATURE CONFIGURATION
+  # =========================================================================
+  dbscan_features:
+    # Core behavioral features (well-suited for density-based clustering)
+    core_behavioral:
+      - "total_spend"
+      - "num_trips"
+      - "num_sessions"
+      - "conversion_rate"
+      - "browsing_intensity"
+      - "RFM_score"
+    
+    # Travel pattern features
+    travel_patterns:
+      - "num_destinations"
+      - "international_ratio"
+      - "avg_trip_length"
+      - "business_rate"
+      - "group_rate"
+      - "avg_km_flown"
+    
+    # Engagement metrics
+    engagement:
+      - "num_clicks"
+      - "avg_session_duration"
+      - "browsing_rate"
+      - "num_browsing_sessions"
+      - "total_browsing_clicks"
+    
+    # Spending patterns
+    spending:
+      - "avg_money_spent_flight"
+      - "avg_money_spent_hotel_trip"
+      - "money_spent_hotel_total"
+      - "avg_money_spent_per_seat"
+    
+    # Derived features for DBSCAN
+    derived:
+      - "spend_per_trip"
+      - "clicks_per_session"
+      - "hotel_preference_score"
+      - "trip_frequency"
+      - "engagement_score"
+
+  # =========================================================================
+  # DBSCAN OPTIMIZATION CONFIG
+  # =========================================================================
+  dbscan_optimization:
+    # EPS search strategies
+    eps_search:
+      method: "knee_detection"  # knee_detection | percentile | grid_search
+      min_eps: 0.1
+      max_eps: 2.0
+      step_size: 0.05
+      target_clusters: [3, 8]  # Desired range of clusters
+      percentile_range: [60, 95]
+    
+    # Auto-tuning parameters
+    auto_tuning:
+      enabled: true
+      max_iterations: 10
+      quality_threshold: 0.7
+      min_cluster_size: 50
+      max_noise_ratio: 0.3
+
+  # =========================================================================
+  # COMPREHENSIVE METRICS CONFIGURATION
+  # =========================================================================
+  metrics:
+    internal_metrics:
+      - "silhouette_score"
+      - "calinski_harabasz_score"
+      - "davies_bouldin_score"
+      - "cluster_separation"
+      - "cluster_density"
+    
+    stability_metrics:
+      - "jaccard_similarity"
+      - "rand_index"
+      - "adjusted_rand_index"
+      - "normalized_mutual_info"
+    
+    business_metrics:
+      - "cluster_balance_score"
+      - "segment_distinctness"
+      - "vip_separation_score"
+      - "perk_effectiveness_score"
+    
+    dbscan_specific_metrics:
+      - "noise_ratio"
+      - "cluster_stability"
+      - "density_connectedness"
+      - "border_point_ratio"
+      - "meaningful_cluster_ratio"
+    
+    validation_thresholds:
+      min_silhouette: 0.25
+      max_davies_bouldin: 2.0
+      min_calinski_harabasz: 100
+      min_cluster_size: 200
+      max_cluster_variance: 0.30
+      max_noise_ratio: 0.3  # For DBSCAN
+
+  # =========================================================================
+  # FEATURE ENGINEERING CONFIG
+  # =========================================================================
+  features:
+    optimal_set:
+      value_loyalty:
+        - total_spend
+        - spend_per_trip
+        - booking_growth
+        - RFM_score
+        - global_booking_share
+      
+      trip_behavior:
+        - num_trips
+        - num_destinations
+        - international_ratio
+        - avg_km_flown
+        - avg_trip_length
+      
+      travel_preferences:
+        - business_rate
+        - group_rate
+        - weekend_ratio
+        - hotel_preference_score
+        - avg_bags
+      
+      price_sensitivity:
+        - price_sensitivity_index
+        - discount_ratio
+        - avg_money_spent_per_seat
+      
+      behavioral:
+        - cancellation_rate
+        - conversion_rate
+        - browsing_intensity
+        - avg_time_after_booking
+      
+      engagement:
+        - session_efficiency
+        - click_efficiency
+    
+    winsorize:
+      total_spend: [0.01, 0.99]
+      spend_per_trip: [0.01, 0.99]
+      avg_km_flown: [0.01, 0.99]
+      num_clicks: [0.01, 0.99]
+
+  # =========================================================================
+  # VISUALIZATION SETTINGS
+  # =========================================================================
+  visualization:
+    enable_2d_plot: true
+    enable_3d_plot: false
+    enable_profile_heatmap: true
+    enable_distribution_chart: true
+    enable_summary_table: true
+    enable_algorithm_comparison: true
+    enable_dbscan_diagnostics: true
+    
+    colors:
+      cluster_0: "#2ecc71"  # VIP - Green
+      cluster_1: "#3498db"  # Business - Purple
+      cluster_2: "#f39c12"  # Group - Orange
+      cluster_3: "#9b59b6"  # Browsers - Blue
+      cluster_4: "#95a5a6"  # Baseline - Gray
+
+  # =========================================================================
+  # REPORTING
+  # =========================================================================
+  reporting:
+    generate_insights: true
+    algorithm_comparison: true
+    export_formats:
+      - csv
+      - parquet
+    
+    metrics_to_track:
+      - cluster_sizes
+      - silhouette_score
+      - davies_bouldin_score
+      - calinski_harabasz_score
+      - avg_spend_per_cluster
+      - avg_trips_per_cluster
+      - conversion_rate_per_cluster
+      - perk_distribution
+      - noise_ratio  # For DBSCAN
+      - cluster_stability  # For DBSCAN
+
+  # =========================================================================
+  # VALIDATION RULES
+  # =========================================================================
+  validation:
+    min_cluster_size: 200        # Minimum users per cluster
+    max_cluster_variance: 0.30   # Max allowed coefficient of variation
+    min_silhouette_score: 0.25   # Minimum acceptable silhouette
+    max_noise_ratio: 0.3         # Maximum allowed noise for DBSCAN
+    
+    alerts:
+      warn_if_imbalanced: true
+      warn_if_low_silhouette: true
+      warn_if_tiny_cluster: true
+      warn_if_high_noise: true   # For DBSCAN
+
+  # =========================================================================
+  # BUSINESS RULES
+  # =========================================================================
+  business_rules:
+    # VIP segment must have highest average spend
+    enforce_vip_spend_threshold: true
+    
+    # Baseline segment should be manageable (<25%)
+    baseline_max_percentage: 25.0
+    
+    # No segment should be < 10% (too small for campaigns)
+    segment_min_percentage: 10.0
+    
+    # Perk assignment priority order (in case of ties)
+    perk_priority:
+      - "1 night free hotel plus flight"
+      - "free hotel meal"
+      - "free checked bags"
+      - "exclusive discounts"
+      - "no cancellation fees"
+    
+    # DBSCAN-specific business rules
+    dbscan:
+      min_meaningful_clusters: 3
+      max_meaningful_clusters: 8
+      require_vip_cluster: true
+      allow_noise_reassignment: true
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+# 1. Adjust quantile thresholds based on your data distribution
+# 2. Monitor segment sizes after each run and adjust thresholds
+# 3. Run A/B tests to validate perk effectiveness per segment
+# 4. Review quarterly and update thresholds as customer base evolves
+# 5. Use rebalancing sparingly - only when initial clustering is very imbalanced
+# 6. For DBSCAN: Enable auto_eps for automatic parameter tuning
+# 7. For algorithm comparison: Set algorithm to "auto" to test all methods
+# 8. DBSCAN works best with the dbscan_features set, not the optimal_set

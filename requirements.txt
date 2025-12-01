@@ -1,0 +1,68 @@
+# Core data processing
+pandas
+numpy
+
+# Database connectivity
+sqlalchemy
+psycopg2-binary
+
+# Notebook environment
+ipython
+jupyter
+
+# Machine learning & modeling
+scikit-learn
+xgboost
+lightgbm
+
+# Visualization
+matplotlib
+seaborn
+plotly
+dash
+dash-bootstrap-components
+flask
+flask-cors
+flask_caching
+
+# HTML templating & web utilities
+jinja2
+gunicorn
+networkx
+
+# Data validation & transformation
+pydantic
+python-dateutil
+
+# File I/O & formats
+openpyxl
+pyarrow
+tabulate
+
+# Logging & monitoring
+loguru
+tqdm
+
+# Testing & linting
+pytest
+flake8
+black
+
+# Environment & config
+python-dotenv
+configparser
+pyyaml
+
+# API & async support
+requests
+aiohttp
+
+# Geospatial and mapping
+geopandas
+cartopy
+shapely
+graphviz
+
+# AI & image generation
+openai
+pillow

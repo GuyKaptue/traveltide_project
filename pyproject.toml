@@ -1,0 +1,125 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "traveltide-project"
+version = "0.1.0"
+description = "A data-driven dashboard and analytics project for travel session insights"
+authors = [
+    { name = "Guy Kaptue", email = "guykaptue24@gmail.com" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+    # Core data processing
+    "pandas",
+    "numpy",
+
+    # Database connectivity
+    "sqlalchemy",
+    "psycopg2-binary",
+
+    # Notebook environment
+    "ipython",
+    "jupyter",
+
+    # Machine learning & modeling
+    "scikit-learn",
+    "xgboost",
+    "lightgbm",
+
+    # Visualization
+    "matplotlib",
+    "seaborn",
+    "plotly",
+    "networkx",
+
+    # Web dashboard
+    "flask",
+    "flask-cors",
+    "flask_caching",
+    "dash",
+    "dash-bootstrap-components",
+
+    # HTML templating & server
+    "jinja2",
+    "gunicorn",
+
+    # Data validation & transformation
+    "pydantic",
+    "python-dateutil",
+
+    # File I/O & formats
+    "openpyxl",
+    "pyarrow",
+    "tabulate",
+
+    # Logging & monitoring
+    "loguru",
+    "tqdm",
+
+    # Testing & linting
+    "pytest",
+    "flake8",
+    "black",
+
+    # Environment & config
+    "python-dotenv",
+    "configparser",
+    "pyyaml",
+
+    # API & async support
+    "requests",
+    "aiohttp",
+
+    # Geospatial & mapping
+    "geopandas",
+    "cartopy",
+    "shapely",
+    "graphviz",
+
+    # AI & image generation
+    "openai",
+    "pillow"
+]
+
+[project.urls]
+Homepage = "https://github.com/GuyKaptue"
+Repository = "https://github.com/GuyKaptue/tts-mastery-project"
+Issues = "https://github.com/GuyKaptue/tts-mastery-project/issues"
+Documentation = "https://github.com/GuyKaptue/tts-mastery-project/tree/main/reports/docs"
+"Executive Presentation" = "https://github.com/GuyKaptue/tts-mastery-project/blob/main/reports/docs/presentation_traveltide_rewards.pdf"
+"Analysis Report" = "https://github.com/GuyKaptue/tts-mastery-project/blob/main/reports/docs/raports_summary.pdf"
+"PowerPoint Deck" = "https://github.com/GuyKaptue/tts-mastery-project/blob/main/reports/docs/presentation_traveltide_rewards.pptx"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.flake8]
+max-line-length = 88
+exclude = ["build", "dist", ".venv", "__pycache__"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "st",
+    "app"
+]
