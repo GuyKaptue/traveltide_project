@@ -14,7 +14,7 @@
 
 > **A production-ready, modular framework for intelligent customer segmentation, perk assignment, and A/B testing—built for real-world travel analytics.**
 
-[![View Presentation](https://img.shields.io/badge/📊-View_Presentation-blue?style=for-the-badge)](reports/docs/presentation_traveltide_rewards.pdf)
+[![View Presentation](https://img.shields.io/badge/📊-View_Presentation-blue?style=for-the-badge)](reports/docs/presentation_traveltide.pdf)
 [![Read Full Report](https://img.shields.io/badge/📄-Read_Full_Report-green?style=for-the-badge)](reports/docs/raports_summary.pdf)
 
 ![TravelTide Analytics](reports/traveltide.webp)

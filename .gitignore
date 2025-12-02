@@ -154,6 +154,7 @@ data/csv/raw/**/*
 # Processed data - NEVER commit to GitHub
 data/csv/processed/
 data/csv/processed/**/*
+!data/csv/processed/segment/*.csv
 
 # Database files
 *.db
@@ -181,8 +182,8 @@ data/csv/processed/**/*
 # ==========================================
 # Generated reports (keep docs folder)
 reports/segment/**/*.html
-reports/segment/**/*.csv
-reports/segment/**/*.json
+!reports/segment/**/*.csv
+!reports/segment/**/*.json
 reports/segment/**/*.png
 reports/segment/**/*.jpg
 
