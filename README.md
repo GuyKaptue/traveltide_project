@@ -68,6 +68,7 @@ This engine assigns **five strategic perks** to behaviorally distinct customer g
 ---
 
 ## 🎯 Overview
+<a name="overview"></a>
 
 TravelTide is a **unified customer intelligence platform** designed for the travel industry.
 It combines **rule-based segmentation**, **unsupervised machine learning**, and a **statistical A/B testing engine** to deliver personalized perks, boost conversions, and optimize marketing spend.
@@ -84,7 +85,7 @@ It combines **rule-based segmentation**, **unsupervised machine learning**, and 
 ---
 
 ## 🧬 TravelTide Datasets
-
+<a name="traveltide-datasets"></a>
 The platform integrates multiple raw and processed datasets from TravelTide’s PostgreSQL environment.
 
 ### **Raw Tables (Source Layer)**
@@ -117,6 +118,7 @@ These curated tables feed into segmentation and A/B testing.
 ---
 
 ## 👤 Elena’s Cohort Definition
+<a name="elenas-cohort-definition"></a>
 
 Elena’s logic defines the **high-intent cohort** used for deeper modeling and experimentation.
 
@@ -138,6 +140,7 @@ This provides a reliable statistical base for ML clustering and perk optimizatio
 ---
 
 ## ✨ Key Features
+<a name="key-features"></a>
 
 ### 🔀 Dual Segmentation Engine
 
@@ -161,6 +164,7 @@ This provides a reliable statistical base for ML clustering and perk optimizatio
 ---
 
 ## 💡 Strategic Insights & Findings
+<a name="strategic-insights--findings"></a>
 
 Based on `analysez.ipynb`, `comparison.ipynb`, and `perk_ab_test.ipynb`:
 
@@ -188,7 +192,7 @@ The **VIP High-Frequency Spenders** segment has an **average spend of $8,371.94*
 ---
 
 ## 🏗 Project Architecture
-
+<a name="project-architecture"></a>
 ```
 traveltide_project/
 │
@@ -267,7 +271,7 @@ traveltide_project/
 ---
 
 ## ⚡ Quick Start
-
+<a name="quick-start"></a>
 ### 1. ML Segmentation
 
 ```python
@@ -309,7 +313,7 @@ print(results["recommendation"])
 ---
 
 ## 🧪 A/B Testing Framework
-
+<a name="ab-testing-framework"></a>
 Supports:
 
 * χ² tests
@@ -328,7 +332,7 @@ The framework recommends a winner based on statistical significance and business
 ---
 
 ## 🔧 Configuration
-
+<a name="configuration"></a>
 Two configuration layers:
 
 * `ml_config.yaml` – Clustering parameters
@@ -339,12 +343,14 @@ Supports full plug-and-play customization.
 ---
 
 ## 📚 API Reference
+<a name="api-reference"></a>
 
 Full API documentation is available via docstrings and the `src/` module organization.
 
 ---
 
 ## 🧪 Testing
+<a name="testing"></a>
 
 The system includes:
 
@@ -355,7 +361,7 @@ The system includes:
 ---
 
 ## 📈 Performance
-
+<a name="performance"></a>
 Designed for:
 
 * **100k+ users**
@@ -365,20 +371,20 @@ Designed for:
 ---
 
 ## 🤝 Contributing
-
+<a name="contributing"></a>
 Pull requests welcome.
 Make sure code is formatted with **Black** and passes all tests.
 
 ---
 
 ## 📄 License
-
+<a name="license"></a>
 MIT License.
 
 ---
 
 ## 📬 Contact
-
+<a name="contact"></a>
 For questions, issues, or collaboration:
 
 * [GitHub Issues](https://github.com/GuyKaptue)
@@ -387,10 +393,12 @@ For questions, issues, or collaboration:
 ---
 
 ## 📊 Project Status
+<a name="project-status"></a>
 
 * **Version:** 1.0.0
 * **Status:** Production Ready
 * **Last Updated:** November 2025
+
 
 ### Roadmap
 
