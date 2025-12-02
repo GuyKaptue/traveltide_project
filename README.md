@@ -17,9 +17,27 @@
 [![View Presentation](https://img.shields.io/badge/📊-View_Presentation-blue?style=for-the-badge)](reports/docs/presentation_traveltide_rewards.pdf)
 [![Read Full Report](https://img.shields.io/badge/📄-Read_Full_Report-green?style=for-the-badge)](reports/docs/raports_summary.pdf)
 
-![TravelTide Analytics](reports/traveltide_copy.png)
+![TravelTide Analytics](reports/traveltide.webp)
 
 </div>
+
+## TravelTide Context & Motivation
+
+TravelTide manages **1,020,926 registered users** generating **5.4 million sessions annually**, yet faces critical inefficiencies:
+
+* **26% cancellation rate** among high-risk segments
+* **Suboptimal perk distribution** reducing customer retention
+* **Undifferentiated marketing** that fails to capture full revenue potential from premium travelers
+
+By analyzing **49,211 sessions** from **5,998 highly active users** (7+ sessions in 2023 and non-canceled trips), we developed a **dual-segmentation framework** combining:
+
+* **Rule-based segmentation logic**
+* **K-Means clustering (ML-based)**
+
+This engine assigns **five strategic perks** to behaviorally distinct customer groups, optimizing personalization impact and business outcomes.
+
+---
+
 > **A production-ready, modular framework for intelligent customer segmentation, perk assignment, and A/B testing—built for real-world travel analytics.**
 
 ---
@@ -363,8 +381,8 @@ MIT License.
 
 For questions, issues, or collaboration:
 
-* GitHub Issues
-* Email (if applicable)
+* [GitHub Issues](https://github.com/GuyKaptue)
+* [LinkedIn](https://www.linkedin.com/in/guy-michel-kaptue-tabeu)
 
 ---
 
